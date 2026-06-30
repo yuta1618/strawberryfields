@@ -1,24 +1,21 @@
 # Optical Quantum Teleportation with Strawberry Fields
 
-このプロジェクトは、光量子計算ライブラリ **Strawberry Fields** を使用して、連続変数（CV）量子テレポーテーションをシミュレーションするものです。
+This project implements and simulates continuous-variable (CV) quantum teleportation using the photonic quantum computing framework **Strawberry Fields**. The core objective is to transfer an unknown coherent state ( |\alpha\rangle ) between optical modes via entanglement-assisted communication, combining EPR (Einstein–Podolsky–Rosen) correlations with classical feedforward to reconstruct the original quantum state at a remote mode.
 
-Python 3.10.5 環境において、最新の Strawberry Fields (v0.23.0+) の構文に対応した実装を行っています。
+The implementation is fully compatible with Python 3.10.5 and follows the modern Strawberry Fields (v0.23.0+) architecture based on the separation of `sf.Program` and `sf.Engine`, enabling a clearer distinction between circuit definition and execution.
 
-## 概要
-コヒーレント状態 $|\alpha\rangle$ を、量子もつれ（EPR対）と古典情報のフィードバックを用いて別のモードへ転送します。
+The simulation is performed on the Gaussian backend, allowing efficient phase-space evolution of multimode Gaussian states without resorting to Fock-space truncation. This significantly improves computational scalability while preserving analytical tractability for continuous-variable systems.
 
-### 実装のポイント
-- **最新のAPI構造**: `sf.Program` と `sf.Engine` を分離した最新の記述法を採用。
-- **ガウシアン・バックエンド**: 高速なガウシアン・シミュレーションを実行。
-- **古典フィードバック**: 測定結果（RegRef）を `.par` を介してリアルタイムでゲートパラメータに反映。
-- **可視化**: 転送後の状態をウィグナー関数（Wigner function）でプロットし、転送精度を視覚的に確認可能。
+The teleportation protocol consists of preparing a two-mode squeezed vacuum state as the entanglement resource, performing a joint Bell-like measurement on the input mode and one half of the EPR pair, and applying displacement operations conditioned on homodyne measurement outcomes via classical feedforward. This is implemented using RegRef parameters and `.par` bindings, enabling dynamic update of gate parameters based on measurement results.
 
-## 環境構築
-以下の環境で動作確認済みです。
-- Python 3.10.5
-- Strawberry Fields
-- NumPy
-- Matplotlib
+This real-time classical control loop is essential to faithfully reproduce the CV teleportation protocol and highlights the hybrid quantum–classical nature of photonic quantum computing.
+
+The performance of the protocol is evaluated by reconstructing the output state and analyzing its Wigner function, which allows direct visualization of phase-space displacement, squeezing degradation, and noise introduced by finite squeezing.
+
+Additional analysis includes parameter sweeps over squeezing strength to quantify teleportation fidelity scaling, comparison between ideal infinite-squeezing limits and realistic resource constraints, and verification of quadrature correlations before and after teleportation.
+
+Overall, this project provides a minimal yet physically consistent simulation framework for CV quantum state transfer and serves as a foundation for extensions toward Gaussian boson sampling, photonic quantum machine learning models, and hybrid optical–classical signal processing architectures.
 
 ```bash
 pip install strawberryfields numpy matplotlib
+```
